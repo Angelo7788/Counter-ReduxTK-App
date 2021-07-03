@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
-import { Text, View, TextInput, StyleSheet} from 'react-native';
+import React from 'react';
+import Counter from './src/containers/Counter';
+import { Provider } from 'react-redux';
+import store from './src/reducer/store';
 
-const Counter = () => {
 
-  return (
-    <View style={{ marginTop: 30 }}  >
-      <Text  style={{ fontSize:24, margin:10 }}  >Counter Test App</Text>
-    </View>
+const App = () => {
+  return(
+    <Provider  store={store}  >
+    <Counter/>
+    </Provider>
   )
-
 };
 
-const styles = StyleSheet.create({});
-
-export default Counter;
+export default App;
