@@ -1,11 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, TextInput, StyleSheet, Button} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   decrement,
   increment,
   incrementByAmount,
+  delayIncrement,
+  thunkIncrementAmount,
+  thunkIncrementIfCount0,
 } from '../reducer/CounterReducer';
+import { getPostsFromJsonServer, getOnePostsFromJson } from '../reducer/postListReducer';
+
 
 const Counter = () => {
   const {count} = useSelector(state => state.counter);
@@ -13,6 +18,11 @@ const Counter = () => {
   const stateValue = useSelector(state => state.counter.count);
   // if we want to define a new const name
   const dispatch = useDispatch();
+
+  useEffect(() => {
+      dispatch(getPostsFromJsonServer({limit:1}))
+  },[dispatch]);
+  // we want to fetch only 5 posts
 
   const [value1, setValue1] = useState(0);
   const [value2, setValue2] = useState(0);
@@ -42,9 +52,13 @@ const Counter = () => {
       <Button title="INCREMENT" onPress={() => dispatch(increment())} />
       <Button title="DECREMENT" onPress={() => dispatch(decrement())} />
       <Button
-        title="INCREMENT 50"
+        title="INCREMENT value1 - value2"
         onPress={() => dispatch(incrementByAmount({value1, value2}))}
       />
+      <Button title="DELAY INCR" onPress={() => dispatch(delayIncrement())} />
+      <Button title="INCR by value 1" onPress={() => dispatch(thunkIncrementAmount(Number(value1)))} />
+      <Button title="INCR if 0" onPress={() => dispatch(thunkIncrementIfCount0(Number(value1)))} />
+      <Button title="get post" onPress={() => dispatch(getOnePostsFromJson(Number(2)))} />
     </View>
   );
 };
